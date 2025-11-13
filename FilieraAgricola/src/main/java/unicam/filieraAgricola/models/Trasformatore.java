@@ -2,8 +2,8 @@ package unicam.filieraAgricola.models;
 
 public class Trasformatore extends Venditore{
 
-    public Trasformatore(String nome, String cognome, String email, String password){
-        super(nome,cognome,email,password);
+    public Trasformatore(String nome, String cognome, String email, String password, RuoloUtente ruolo){
+        super(nome,cognome,email,password,ruolo);
     }
 
     public Trasformatore(){
