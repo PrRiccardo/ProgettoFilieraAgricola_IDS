@@ -5,15 +5,19 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 public class Prodotto {
 
     @Id
-    private String id;
+    private String idProdotto;
 
     private String nome;
     private String descrizione;
     private double prezzo;
     private int quantita;
 
+    private StatoProdotto statoProdotto;
+
     @DBRef
     private String idVenditore;
+
+    private String motivoRifiuto;
 
     public Prodotto(String nome, String descrizione, double prezzo, int quantita, String idVenditore) {
         this.nome = nome;
@@ -21,15 +25,17 @@ public class Prodotto {
         this.prezzo = prezzo;
         this.quantita = quantita;
         this.idVenditore = idVenditore;
+        this.statoProdotto = StatoProdotto.IN_ATTESA_APPROVAZIONE;
+        this.motivoRifiuto = null;
     }
 
     public Prodotto() {}
 
     public String getId() {
-        return id;
+        return idProdotto;
     }
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String idProdotto) {
+        this.idProdotto = idProdotto;
     }
 
     public String getNome() {
@@ -67,4 +73,17 @@ public class Prodotto {
         this.idVenditore = idVenditore;
     }
 
+    public StatoProdotto getStatoProdotto() {
+        return statoProdotto;
+    }
+    public void setStatoProdotto(StatoProdotto statoProdotto) {
+        this.statoProdotto = statoProdotto;
+    }
+
+    public String getMotivoRifiuto() {
+        return motivoRifiuto;
+    }
+    public void setMotivoRifiuto(String motivoRifiuto) {
+        this.motivoRifiuto = motivoRifiuto;
+    }
 }
