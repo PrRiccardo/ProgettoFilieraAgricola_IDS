@@ -15,15 +15,18 @@ public class PacchettoProdotti {
     private double prezzoTotale;
     private int quantita;
 
+    @DBRef
     private String idDistributore;
 
     @DBRef
     private List<Prodotto> prodotti;
 
-    public PacchettoProdotti(String nome, String descrizione, String idDistributore) {
+    public PacchettoProdotti(String nome, String descrizione, String idDistributore, List<Prodotto> prodotti) {
         this.nome = nome;
         this.descrizione = descrizione;
         this.idDistributore = idDistributore;
+        this.prodotti = prodotti;
+        calcolaPrezzoTotale();
     }
 
     public PacchettoProdotti() {}
