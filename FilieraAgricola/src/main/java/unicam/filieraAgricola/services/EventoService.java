@@ -7,6 +7,7 @@ import unicam.filieraAgricola.repositories.EventoRepository;
 import unicam.filieraAgricola.models.RuoloUtente;
 import unicam.filieraAgricola.repositories.UtenteRepository;
 
+import java.util.List;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -31,5 +32,25 @@ public class EventoService {
         eventoRepository.save(evento);
     }
 
+    public void eliminaEvento(String idEvento, String idAnimatore){
+        Optional<Evento> evento = eventoRepository.findById(idEvento);
+        Optional<UtenteLoggato> animatore = utenteRepository.findById(idAnimatore);
+        if(evento.isEmpty())
+            throw new IllegalArgumentException("Evento non trovato");
+        if(animatore.get().getRuolo()!= RuoloUtente.ANIMATORE){
+            throw new IllegalArgumentException("Impossibile eliminare evento");
+        }
+        eventoRepository.delete(evento.get());
+    }
 
+    public List<Evento> visualizzaEventi(){
+        return eventoRepository.findByDataInizioAfterAndDataFineBefore(LocalDateTime.now());
+    }
+
+    public Evento cercaEvento(String idEvento){
+        Optional<Evento> evento = eventoRepository.findById(idEvento);
+        if(evento.isEmpty())
+            throw new IllegalArgumentException("Evento non trovato");
+        return evento.get();
+    }
 }
