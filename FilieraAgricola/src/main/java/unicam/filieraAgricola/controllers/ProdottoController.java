@@ -3,10 +3,11 @@ package unicam.filieraAgricola.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import unicam.filieraAgricola.models.Prodotto;
 import unicam.filieraAgricola.services.ProdottoService;
+
+import java.util.List;
 
 @RestController
 public class ProdottoController {
@@ -21,6 +22,34 @@ public class ProdottoController {
             return new ResponseEntity<>("Prodotto creato", HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>("Prodotto non creato", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("{idProdotto}")
+    public ResponseEntity<String> EliminaProdotto(@PathVariable String idProdotto, @RequestParam String idVenditore) {
+        try{
+            prodottoService.EliminaProdotto(idProdotto, idVenditore);
+            return new ResponseEntity<>("Prodotto eliminato", HttpStatus.OK);
+        }catch(Exception ex){
+            return new ResponseEntity<>("Prodotto non eliminato", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/visualizza")
+    public ResponseEntity<List<Prodotto>> VisualizzaListaProdotti() {
+        try {
+            return new ResponseEntity<>(prodottoService.VisualizzaListaProdotti(), HttpStatus.OK);
+        }catch (Exception ex) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/cerca")
+    public ResponseEntity<Prodotto> CercaProdotto(@RequestParam String idProdotto) {
+        try {
+            return new ResponseEntity<>(prodottoService.CercaProdotto(idProdotto), HttpStatus.OK);
+        }catch (Exception ex){
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -2,10 +2,7 @@ package unicam.filieraAgricola.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import unicam.filieraAgricola.models.Prodotto;
-import unicam.filieraAgricola.models.RuoloUtente;
-import unicam.filieraAgricola.models.StatoProdotto;
-import unicam.filieraAgricola.models.UtenteLoggato;
+import unicam.filieraAgricola.models.*;
 import unicam.filieraAgricola.repositories.ProdottoRepository;
 import unicam.filieraAgricola.repositories.UtenteRepository;
 
@@ -30,6 +27,33 @@ public class ProdottoService {
 
         Prodotto prodotto = new Prodotto(nome, descrizione, prezzo, quantita, idVenditore);
         prodottoRepository.save(prodotto);
+    }
+
+    public void EliminaProdotto(String idProdotto, String idVenditore) {
+        Optional<Prodotto> prodotto = prodottoRepository.findById(idProdotto);
+        if(prodotto.isEmpty())
+            throw new IllegalArgumentException("Prodotto non trovato!");
+        Optional<UtenteLoggato> venditore = utenteRepository.findById(idVenditore);
+        if(venditore.isEmpty())
+            throw new IllegalArgumentException("Venditore non trovato!");
+        if(venditore.get().getRuolo() != RuoloUtente.VENDITORE)
+            throw new IllegalArgumentException("Impossibile eliminare il prodotto!");
+
+        prodottoRepository.delete(prodotto.get());
+    }
+
+    public List<Prodotto> VisualizzaListaProdotti() {
+        List<Prodotto> prodotti = prodottoRepository.findByStatoProdotto(StatoProdotto.APPROVATO);
+        if(prodotti.isEmpty())
+            throw new IllegalArgumentException("Prodotti vuoti!");
+        return prodotti;
+    }
+
+    public Prodotto CercaProdotto(String idProdotto) {
+        Optional<Prodotto> prodotto = prodottoRepository.findById(idProdotto);
+        if(prodotto.isEmpty())
+            throw new IllegalArgumentException("Prodotto non trovato!");
+        return prodotto.get();
     }
 
     public void ApprovaProdotto(String idProdotto, String idCuratore) {

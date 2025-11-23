@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 import unicam.filieraAgricola.models.Prodotto;
 import org.springframework.data.repository.CrudRepository;
+import unicam.filieraAgricola.models.StatoProdotto;
 
 import java.util.List;
 
@@ -11,5 +12,6 @@ import java.util.List;
 public interface ProdottoRepository extends MongoRepository<Prodotto, String> {
 
     List<Prodotto> findByNomeAndPrezzoAndIdVenditore(String nome, double  prezzo, String idVenditore);
+    List<Prodotto> findByStatoProdotto(StatoProdotto statoProdotto);
 
 }
