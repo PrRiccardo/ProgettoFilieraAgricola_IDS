@@ -20,9 +20,9 @@ public class PacchettoController {
     private PacchettoService pacchettoService;
 
     @PostMapping("/creaPacchetto")
-    public ResponseEntity<String> creaPacchetto(@RequestBody String nome, String descrizione, String idVenditore, List<Prodotto> prodotti) {
+    public ResponseEntity<String> creaPacchetto(@RequestBody String nome, String descrizione, int quantita, String idVenditore, List<Prodotto> prodotti) {
         try {
-            pacchettoService.creaPacchetto(nome, descrizione, idVenditore, prodotti);
+            pacchettoService.creaPacchetto(nome, descrizione, quantita, idVenditore, prodotti);
             return new ResponseEntity<>("Pacchetto creato", HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>("Pacchetto non creato", HttpStatus.BAD_REQUEST);

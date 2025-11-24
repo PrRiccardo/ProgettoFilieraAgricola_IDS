@@ -1,91 +1,37 @@
 package unicam.filieraAgricola.models;
 
+import jakarta.persistence.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.List;
 
-public class PacchettoProdotti {
+@Entity
+@DiscriminatorValue("PACCHETTO")
+public class PacchettoProdotti extends Prodotto {
 
-    @Id
-    private String idPacchetto;
-
-    private String nome;
-    private String descrizione;
-    private double prezzoTotale;
-    private int quantita;
-
-    @DBRef
-    private String idDistributore;
-
-    @DBRef
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "pacchettoProdotti",
+            joinColumns = @JoinColumn(name = "idPacchetto"),
+            inverseJoinColumns = @JoinColumn(name = "idProdotto")
+    )
     private List<Prodotto> prodotti;
 
-    public PacchettoProdotti(String nome, String descrizione, String idDistributore, List<Prodotto> prodotti) {
-        this.nome = nome;
-        this.descrizione = descrizione;
-        this.idDistributore = idDistributore;
+    public PacchettoProdotti(String nome, String descrizione, int quantita, String idVenditore, List<Prodotto> prodotti) {
+        super (nome, descrizione, 0, quantita, idVenditore);
         this.prodotti = prodotti;
-        calcolaPrezzoTotale();
+        this.setPrezzo(calcolaPrezzoTotale());
     }
 
     public PacchettoProdotti() {}
 
-    public void calcolaPrezzoTotale(){
+    public double calcolaPrezzoTotale(){
         double temp = 0;
         for(Prodotto prodotto : prodotti){
             temp+=prodotto.getPrezzo();
         }
-        this.prezzoTotale = temp;
+        return temp;
     }
 
-    public String getIdPacchetto() {
-        return idPacchetto;
-    }
-    public void setIdPacchetto(String idPacchetto) {
-        this.idPacchetto = idPacchetto;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getDescrizione() {
-        return descrizione;
-    }
-    public void setDescrizione(String descrizione) {
-        this.descrizione = descrizione;
-    }
-
-    public double getPrezzoTotale() {
-        return prezzoTotale;
-    }
-    public void setPrezzoTotale(double prezzoTotale) {
-        this.prezzoTotale = prezzoTotale;
-    }
-
-    public int getQuantita() {
-        return quantita;
-    }
-    public void setQuantita(int quantita) {
-        this.quantita = quantita;
-    }
-
-    public String getIdDistributore() {
-        return idDistributore;
-    }
-    public void setIdDistributore(String idDistributore) {
-        this.idDistributore = idDistributore;
-    }
-
-    public List<Prodotto> getProdotti() {
-        return prodotti;
-    }
-    public void setProdotti(List<Prodotto> prodotti) {
-        this.prodotti = prodotti;
-        calcolaPrezzoTotale();
-    }
 }

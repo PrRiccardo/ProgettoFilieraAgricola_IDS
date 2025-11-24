@@ -25,7 +25,7 @@ public class ProdottoService {
         if(!prodottoRepository.findByNomeAndPrezzoAndIdVenditore(nome, prezzo, idVenditore).isEmpty())
             throw new IllegalArgumentException("Prodotto esistente!");
 
-        Prodotto prodotto = new Prodotto(nome, descrizione, prezzo, quantita, idVenditore);
+        Prodotto prodotto = new ProdottoSingolo(nome, descrizione, prezzo, quantita, idVenditore);
         prodottoRepository.save(prodotto);
     }
 

@@ -1,18 +1,20 @@
 package unicam.filieraAgricola.models;
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.*;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
-public class Prodotto {
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipoProdotto")
+public abstract class Prodotto {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String idProdotto;
 
     private String nome;
     private String descrizione;
     private double prezzo;
     private int quantita;
-
-    private StatoProdotto statoProdotto;
 
     @DBRef
     private String idVenditore;
@@ -25,7 +27,6 @@ public class Prodotto {
         this.prezzo = prezzo;
         this.quantita = quantita;
         this.idVenditore = idVenditore;
-        this.statoProdotto = StatoProdotto.IN_ATTESA_APPROVAZIONE;
         this.motivoRifiuto = null;
     }
 
@@ -71,13 +72,6 @@ public class Prodotto {
     }
     public void setIdVenditore(String idVenditore) {
         this.idVenditore = idVenditore;
-    }
-
-    public StatoProdotto getStatoProdotto() {
-        return statoProdotto;
-    }
-    public void setStatoProdotto(StatoProdotto statoProdotto) {
-        this.statoProdotto = statoProdotto;
     }
 
     public String getMotivoRifiuto() {

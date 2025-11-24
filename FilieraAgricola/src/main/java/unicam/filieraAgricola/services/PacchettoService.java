@@ -18,15 +18,17 @@ public class PacchettoService {
     @Autowired
     private UtenteRepository utenteRepository;
 
-    public void creaPacchetto(String nome, String descrizione, String idDistributore, List<Prodotto> prodotti) {
+    public void creaPacchetto(String nome, String descrizione, int quantita, String idDistributore, List<Prodotto> prodotti) {
         Optional<UtenteLoggato> distributore = utenteRepository.findById(idDistributore);
         if(distributore.get().getRuolo() != RuoloUtente.DISTRIBUTORE)
             throw new IllegalArgumentException("Impossibile creare il pacchetto!");
-        for(int i = 0; i < prodotti.size(); i++)
-            if(prodotti.get(i).getStatoProdotto() != StatoProdotto.APPROVATO)
-                throw new IllegalArgumentException("Impossibile creare il pacchetto!");
-        PacchettoProdotti pacchetto = new PacchettoProdotti(nome, descrizione, idDistributore, prodotti);
-        List<PacchettoProdotti> temp = pacchettoRepository.findByNomeAndPrezzoTotaleAndIdDistributore(nome, pacchetto.getPrezzoTotale(), idDistributore);
+        for(Prodotto p : prodotti) {
+            if(p instanceof ProdottoSingolo prodottoSingolo)
+                if(prodottoSingolo.getStatoProdotto() != StatoProdotto.APPROVATO)
+                    throw new IllegalArgumentException("Impossibile creare il pacchetto!");
+        }
+        PacchettoProdotti pacchetto = new PacchettoProdotti(nome, descrizione, quantita, idDistributore, prodotti);
+        List<PacchettoProdotti> temp = pacchettoRepository.findByNomeAndPrezzoTotaleAndIdDistributore(nome, pacchetto.getPrezzo(), idDistributore);
         if(!temp.isEmpty())
             if(temp.getFirst().equals(pacchetto))
                 throw new IllegalArgumentException("Pacchetto esistente!");
