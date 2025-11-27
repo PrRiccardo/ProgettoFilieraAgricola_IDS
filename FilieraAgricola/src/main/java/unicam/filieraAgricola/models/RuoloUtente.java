@@ -6,5 +6,6 @@ public enum RuoloUtente {
     DISTRIBUTORE,
     PRODUTTORE,
     TRASFORMATORE,
-    VENDITORE;
+    VENDITORE,
+    ACQUIRENTE;
 }

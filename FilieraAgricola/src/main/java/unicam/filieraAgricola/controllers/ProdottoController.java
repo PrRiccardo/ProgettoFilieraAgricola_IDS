@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import unicam.filieraAgricola.models.Prodotto;
-import unicam.filieraAgricola.models.ProdottoSingolo;
 import unicam.filieraAgricola.services.ProdottoService;
 
 import java.util.List;
@@ -16,13 +15,23 @@ public class ProdottoController {
     @Autowired
     private ProdottoService prodottoService;
 
-    @PostMapping("/crea")
+    @PostMapping("/creaProdotto")
     public ResponseEntity<String> CreaProdotto(@RequestBody String nome, String descrizione, double prezzo, int quantita, String idVenditore) {
         try{
             prodottoService.CreaProdotto(nome, descrizione, prezzo,  quantita, idVenditore);
             return new ResponseEntity<>("Prodotto creato", HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>("Prodotto non creato", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/creaPacchetto")
+    public ResponseEntity<String> CreaPacchetto(@RequestBody String nome, String descrizione, int quantita, String idVenditore, List<Prodotto> prodotti) {
+        try {
+            prodottoService.CreaPacchetto(nome, descrizione, quantita, idVenditore, prodotti);
+            return new ResponseEntity<>("Pacchetto creato", HttpStatus.OK);
+        }catch(Exception ex){
+            return new ResponseEntity<>("Pacchetto non creato", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -37,7 +46,7 @@ public class ProdottoController {
     }
 
     @GetMapping("/visualizza")
-    public ResponseEntity<List<ProdottoSingolo>> VisualizzaListaProdotti() {
+    public ResponseEntity<List<Prodotto>> VisualizzaListaProdotti() {
         try {
             return new ResponseEntity<>(prodottoService.VisualizzaListaProdotti(), HttpStatus.OK);
         }catch (Exception ex) {
