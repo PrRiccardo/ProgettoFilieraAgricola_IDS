@@ -17,15 +17,17 @@ public class Evento {
     private LocalDateTime dataFine;
 
     @DBRef
-    private UtenteLoggato animatore;
+    private String idAnimatore;
 
 
-    public Evento(String nome, String descrizione, String luogo, LocalDateTime dataInizio, LocalDateTime dataFine) {
+    public Evento(String nome, String descrizione, String luogo, LocalDateTime dataInizio, LocalDateTime dataFine,String idAnimatore) {
         this.nome = nome;
         this.descrizione = descrizione;
         this.luogo = luogo;
         this.dataInizio = dataInizio;
         this.dataFine = dataFine;
+        this.idAnimatore = idAnimatore;
+
     }
 
     public Evento () {}
@@ -48,7 +50,7 @@ public class Evento {
     public LocalDateTime getDataFine() {return dataFine;}
     public void setDataFine(LocalDateTime dataFine) {this.dataFine = dataFine;}
 
-    public UtenteLoggato getAnimatore() {return animatore;}
-    public void setAnimatore(UtenteLoggato animatore) {this.animatore = animatore;}
+    public String getAnimatore() {return idAnimatore;}
+    public void setAnimatore(String animatore) {this.idAnimatore = animatore;}
 
 }

@@ -28,7 +28,7 @@ public class EventoService {
             throw new IllegalArgumentException("Impossibile creare evento");
         }
 
-        Evento evento = new Evento(nome, descrizione, luogo, dataInizio, dataFine);
+        Evento evento = new Evento(nome, descrizione, luogo, dataInizio, dataFine,idAnimatore);
         eventoRepository.save(evento);
     }
 

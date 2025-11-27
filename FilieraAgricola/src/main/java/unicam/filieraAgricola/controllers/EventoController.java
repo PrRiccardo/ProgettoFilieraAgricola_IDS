@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import unicam.filieraAgricola.Dto.DtoEvento;
 import unicam.filieraAgricola.models.Evento;
 import unicam.filieraAgricola.services.EventoService;
 
@@ -18,9 +19,9 @@ public class EventoController {
     private EventoService eventoService;
 
     @PostMapping("/pubblicaEvento")
-    public ResponseEntity<String> pubblicaEvento(@RequestBody String nome, String descrizione, String luogo, LocalDateTime dataInizio, LocalDateTime dataFine,  String idAnimatore){
+    public ResponseEntity<String> pubblicaEvento(@RequestBody DtoEvento dtoEvento){
         try {
-            eventoService.creaEvento(nome,descrizione,luogo,dataInizio,dataFine,idAnimatore);
+            eventoService.creaEvento(dtoEvento.getNome(), dtoEvento.getDescrizione(), dtoEvento.getLuogo(), dtoEvento.getDataInizio(),dtoEvento.getDataFine(),dtoEvento.getAnimatore());
             return new ResponseEntity<>("Prodotto creato", HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>("Prodotto non creato", HttpStatus.BAD_REQUEST);
