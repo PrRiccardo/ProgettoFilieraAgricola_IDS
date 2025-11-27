@@ -1,21 +1,9 @@
 package unicam.filieraAgricola.models;
 
-import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-
 import java.util.List;
 
-@Entity
-@DiscriminatorValue("PACCHETTO")
 public class PacchettoProdotti extends Prodotto {
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "pacchettoProdotti",
-            joinColumns = @JoinColumn(name = "idPacchetto"),
-            inverseJoinColumns = @JoinColumn(name = "idProdotto")
-    )
     private List<Prodotto> prodotti;
 
     public PacchettoProdotti(String nome, String descrizione, int quantita, String idVenditore, List<Prodotto> prodotti) {
@@ -32,6 +20,10 @@ public class PacchettoProdotti extends Prodotto {
             temp+=prodotto.getPrezzo();
         }
         return temp;
+    }
+
+    public List<Prodotto> getProdotti() {
+        return prodotti;
     }
 
 }

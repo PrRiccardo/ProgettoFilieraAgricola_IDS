@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface UtenteRepository extends MongoRepository<UtenteLoggato, String> {
 
-    List<UtenteLoggato> findByRole(RuoloUtente ruolo);
+    List<UtenteLoggato> findByRuolo(RuoloUtente ruolo);
 
 }

@@ -20,17 +20,17 @@ public class ProdottoService {
 
     public void CreaProdotto(String nome, String descrizione, double prezzo, int quantita, String idVenditore) {
         Optional<UtenteLoggato> venditore = utenteRepository.findById(idVenditore);
-        if(venditore.get().getRuolo() != RuoloUtente.VENDITORE)
-            throw new IllegalArgumentException("Impossibile caricare il prodotto!");
+        //if(venditore.get().getRuolo() != RuoloUtente.VENDITORE)
+        //    throw new IllegalArgumentException("Impossibile caricare il prodotto!");
         if(!prodottoRepository.findByNomeAndPrezzoAndIdVenditore(nome, prezzo, idVenditore).isEmpty())
             throw new IllegalArgumentException("Prodotto esistente!");
 
-        Prodotto prodotto = new ProdottoSingolo(nome, descrizione, prezzo, quantita, idVenditore);
+        ProdottoSingolo prodotto = new ProdottoSingolo(nome, descrizione, prezzo, quantita, idVenditore);
         prodottoRepository.save(prodotto);
     }
 
     public void EliminaProdotto(String idProdotto, String idVenditore) {
-        Optional<Prodotto> prodotto = prodottoRepository.findById(idProdotto);
+        Optional<ProdottoSingolo> prodotto = prodottoRepository.findById(idProdotto);
         if(prodotto.isEmpty())
             throw new IllegalArgumentException("Prodotto non trovato!");
         Optional<UtenteLoggato> venditore = utenteRepository.findById(idVenditore);
@@ -42,15 +42,15 @@ public class ProdottoService {
         prodottoRepository.delete(prodotto.get());
     }
 
-    public List<Prodotto> VisualizzaListaProdotti() {
-        List<Prodotto> prodotti = prodottoRepository.findByStatoProdotto(StatoProdotto.APPROVATO);
+    public List<ProdottoSingolo> VisualizzaListaProdotti() {
+        List<ProdottoSingolo> prodotti = prodottoRepository.findByStatoProdotto(StatoProdotto.APPROVATO);
         if(prodotti.isEmpty())
             throw new IllegalArgumentException("Prodotti vuoti!");
         return prodotti;
     }
 
-    public Prodotto CercaProdotto(String idProdotto) {
-        Optional<Prodotto> prodotto = prodottoRepository.findById(idProdotto);
+    public ProdottoSingolo CercaProdotto(String idProdotto) {
+        Optional<ProdottoSingolo> prodotto = prodottoRepository.findById(idProdotto);
         if(prodotto.isEmpty())
             throw new IllegalArgumentException("Prodotto non trovato!");
         return prodotto.get();
@@ -63,7 +63,7 @@ public class ProdottoService {
         if(!utenteRepository.existsById(idProdotto))
             throw new IllegalArgumentException("Prodotto non esistente!");
 
-        Prodotto prodotto = prodottoRepository.findById(idProdotto).get();
+        ProdottoSingolo prodotto = prodottoRepository.findById(idProdotto).get();
         prodotto.setStatoProdotto(StatoProdotto.APPROVATO);
         prodottoRepository.save(prodotto);
     }
@@ -75,7 +75,7 @@ public class ProdottoService {
         if(!utenteRepository.existsById(idProdotto))
             throw new IllegalArgumentException("Prodotto non esistente!");
 
-        Prodotto prodotto = prodottoRepository.findById(idProdotto).get();
+        ProdottoSingolo prodotto = prodottoRepository.findById(idProdotto).get();
         prodotto.setStatoProdotto(StatoProdotto.RIFIUTATO);
         prodotto.setMotivoRifiuto(motivoRifiuto);
         prodottoRepository.save(prodotto);

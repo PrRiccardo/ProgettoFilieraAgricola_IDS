@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface PacchettoRepository extends MongoRepository<PacchettoProdotti, String> {
 
-    List<PacchettoProdotti> findByNomeAndPrezzoTotaleAndIdDistributore(String nome, double prezzoTotale, String idDistributore);
+    List<PacchettoProdotti> findByNomeAndPrezzoAndIdVenditore(String nome, double prezzo, String idVenditore);
 }

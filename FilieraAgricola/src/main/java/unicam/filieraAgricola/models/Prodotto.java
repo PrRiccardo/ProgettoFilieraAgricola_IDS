@@ -1,14 +1,11 @@
 package unicam.filieraAgricola.models;
-import jakarta.persistence.*;
+
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "tipoProdotto")
 public abstract class Prodotto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String idProdotto;
 
     private String nome;
@@ -19,15 +16,12 @@ public abstract class Prodotto {
     @DBRef
     private String idVenditore;
 
-    private String motivoRifiuto;
-
     public Prodotto(String nome, String descrizione, double prezzo, int quantita, String idVenditore) {
         this.nome = nome;
         this.descrizione = descrizione;
         this.prezzo = prezzo;
         this.quantita = quantita;
         this.idVenditore = idVenditore;
-        this.motivoRifiuto = null;
     }
 
     public Prodotto() {}
@@ -74,10 +68,4 @@ public abstract class Prodotto {
         this.idVenditore = idVenditore;
     }
 
-    public String getMotivoRifiuto() {
-        return motivoRifiuto;
-    }
-    public void setMotivoRifiuto(String motivoRifiuto) {
-        this.motivoRifiuto = motivoRifiuto;
-    }
 }

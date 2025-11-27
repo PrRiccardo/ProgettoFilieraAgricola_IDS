@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import unicam.filieraAgricola.models.Prodotto;
+import unicam.filieraAgricola.models.ProdottoSingolo;
 import unicam.filieraAgricola.services.ProdottoService;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class ProdottoController {
     }
 
     @GetMapping("/visualizza")
-    public ResponseEntity<List<Prodotto>> VisualizzaListaProdotti() {
+    public ResponseEntity<List<ProdottoSingolo>> VisualizzaListaProdotti() {
         try {
             return new ResponseEntity<>(prodottoService.VisualizzaListaProdotti(), HttpStatus.OK);
         }catch (Exception ex) {
