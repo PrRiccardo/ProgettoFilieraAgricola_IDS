@@ -40,6 +40,7 @@ public class Carrello {
     public void svoutaCarrello(){
         this.carrello.clear();
     }
+
     public void aggiungiProdotto(Prodotto prodotto, int quantita) {
         ComponenteCarrello componente = new ComponenteCarrello(prodotto, quantita);
         if(carrello.contains(componente)) {

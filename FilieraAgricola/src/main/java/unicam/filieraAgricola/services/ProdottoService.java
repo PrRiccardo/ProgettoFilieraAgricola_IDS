@@ -6,9 +6,7 @@ import unicam.filieraAgricola.models.*;
 import unicam.filieraAgricola.repositories.ProdottoRepository;
 import unicam.filieraAgricola.repositories.UtenteRepository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProdottoService {
@@ -19,7 +17,7 @@ public class ProdottoService {
     @Autowired
     private UtenteRepository utenteRepository;
 
-    public void CreaProdotto(String nome, String descrizione, double prezzo, int quantita, String idVenditore) {
+    public void CreaProdottoSingolo(String nome, String descrizione, double prezzo, int quantita, String idVenditore) {
         UtenteLoggato venditore = utenteRepository.findById(idVenditore).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
         if(venditore.getRuolo() != RuoloUtente.VENDITORE)
             throw new IllegalArgumentException("Impossibile creare il prodotto!");

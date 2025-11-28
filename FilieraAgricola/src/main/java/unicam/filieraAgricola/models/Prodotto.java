@@ -13,7 +13,6 @@ public abstract class Prodotto {
     private double prezzo;
     private int quantita;
 
-    @DBRef
     private String idVenditore;
 
     public Prodotto(String nome, String descrizione, double prezzo, int quantita, String idVenditore) {

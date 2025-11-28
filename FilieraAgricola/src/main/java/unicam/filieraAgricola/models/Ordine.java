@@ -15,7 +15,7 @@ public class Ordine {
     private final Carrello carrello;
 
     @DBRef
-    private UtenteLoggato aquirente;
+    private String idAcquirente;
 
     private double prezzoTotale;
     private String Indirizzo;
@@ -24,10 +24,9 @@ public class Ordine {
     @CreatedDate
     private LocalDateTime dataPagamento;
 
-    public Ordine(String idOrdine, Carrello carrello, UtenteLoggato aquirente, double prezzoTotale, String indirizzo, String metodoPagamento) {
-        this.idOrdine = idOrdine;
+    public Ordine(Carrello carrello, String idAcquirente, double prezzoTotale, String indirizzo, String metodoPagamento) {
         this.carrello = carrello;
-        this.aquirente = aquirente;
+        this.idAcquirente = idAcquirente;
         this.prezzoTotale = prezzoTotale;
         this.Indirizzo = indirizzo;
         this.metodoPagamento = metodoPagamento;
@@ -48,11 +47,11 @@ public class Ordine {
         return carrello;
     }
 
-    public UtenteLoggato getAquirente() {
-        return aquirente;
+    public String getAquirente() {
+        return idAcquirente;
     }
-    public void setAquirente(UtenteLoggato aquirente) {
-        this.aquirente = aquirente;
+    public void setAquirente(String idAcquirente) {
+        this.idAcquirente = idAcquirente;
     }
 
     public double getPrezzoTotale() {

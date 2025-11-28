@@ -22,7 +22,6 @@ public class DtoUtenteLoggato {
         this.password = password;
         this.telefono = telefono;
         this.ruolo = ruolo;
-
     }
 
     public DtoUtenteLoggato (UtenteLoggato utenteLoggato){
@@ -32,7 +31,12 @@ public class DtoUtenteLoggato {
         this.password = utenteLoggato.getPassword();
         this.telefono = utenteLoggato.getTelefono();
         this.ruolo = utenteLoggato.getRuolo();
-
     }
 
+    public String getNome() {return nome;}
+    public String getCognome() {return cognome;}
+    public String getEmail() {return email;}
+    public String getPassword() {return password;}
+    public String getTelefono() {return telefono;}
+    public RuoloUtente getRuolo() {return ruolo;}
 }

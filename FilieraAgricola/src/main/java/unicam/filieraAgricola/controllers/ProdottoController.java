@@ -12,6 +12,7 @@ import unicam.filieraAgricola.services.ProdottoService;
 import java.util.List;
 
 @RestController
+@RequestMapping("/prodotto")
 public class ProdottoController {
 
     @Autowired
@@ -20,7 +21,7 @@ public class ProdottoController {
     @PostMapping("/creaProdotto")
     public ResponseEntity<String> CreaProdotto(@RequestBody DtoProdotto dtoProdotto) {
         try{
-            prodottoService.CreaProdotto(dtoProdotto.getNome(), dtoProdotto.getDescrizione(), dtoProdotto.getPrezzo(), dtoProdotto.getQuantita(),dtoProdotto.getIdVenditore());
+            prodottoService.CreaProdottoSingolo(dtoProdotto.getNome(), dtoProdotto.getDescrizione(), dtoProdotto.getPrezzo(), dtoProdotto.getQuantita(),dtoProdotto.getIdVenditore());
             return new ResponseEntity<>("Prodotto creato", HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>("Prodotto non creato", HttpStatus.BAD_REQUEST);
@@ -65,8 +66,8 @@ public class ProdottoController {
         }
     }
 
-    @PostMapping("/approva")
-    public ResponseEntity<String> ApprovaProdotto(@RequestBody String idProdotto, String idCuratore) {
+    @PostMapping("/approvaProdotto")
+    public ResponseEntity<String> ApprovaProdotto(@RequestParam String idProdotto, @RequestParam String idCuratore) {
         try{
             prodottoService.ApprovaProdotto(idProdotto, idCuratore);
             return new ResponseEntity<>("Prodotto approvato", HttpStatus.OK);
@@ -75,8 +76,8 @@ public class ProdottoController {
         }
     }
 
-    @PostMapping("/rifiuta")
-    public ResponseEntity<String> RifiutaProdotto(@RequestBody String idProdotto, String idCuratore, String motivoRifiuto) {
+    @PostMapping("/rifiutaProdotto")
+    public ResponseEntity<String> RifiutaProdotto(@RequestParam String idProdotto, @RequestParam String idCuratore, @RequestParam String motivoRifiuto) {
         try{
             prodottoService.RifiutaProdotto(idProdotto, idCuratore, motivoRifiuto);
             return new ResponseEntity<>("Prodotto riutato", HttpStatus.OK);
