@@ -21,7 +21,7 @@ public class UtenteService {
     }
 
     public void Login(String email, String password) {
-        UtenteLoggato utente = utenteRepository.findByEmailAndPassword(email, password).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
+        utenteRepository.findByEmailAndPassword(email, password).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
     }
 
 }

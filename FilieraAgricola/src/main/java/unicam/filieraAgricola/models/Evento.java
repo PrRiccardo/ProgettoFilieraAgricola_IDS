@@ -4,6 +4,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Evento {
 
@@ -19,6 +21,9 @@ public class Evento {
     @DBRef
     private String idAnimatore;
 
+    @DBRef
+    private List<UtenteLoggato> utentiIscritti;
+
 
     public Evento(String nome, String descrizione, String luogo, LocalDateTime dataInizio, LocalDateTime dataFine,String idAnimatore) {
         this.nome = nome;
@@ -27,7 +32,7 @@ public class Evento {
         this.dataInizio = dataInizio;
         this.dataFine = dataFine;
         this.idAnimatore = idAnimatore;
-
+        this.utentiIscritti = new ArrayList<>();
     }
 
     public Evento () {}
@@ -53,4 +58,11 @@ public class Evento {
     public String getAnimatore() {return idAnimatore;}
     public void setAnimatore(String animatore) {this.idAnimatore = animatore;}
 
+    public List<UtenteLoggato> getUtentiIscritti() {return utentiIscritti;}
+    public void aggiungiIscritto(UtenteLoggato acquirente) {
+        this.utentiIscritti.add(acquirente);
+    }
+    public void rimuoviIscritto(UtenteLoggato acquirente) {
+        this.utentiIscritti.remove(acquirente);
+    }
 }

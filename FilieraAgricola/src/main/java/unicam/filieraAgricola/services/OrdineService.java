@@ -49,7 +49,7 @@ public class OrdineService {
     }
 
     public List<Ordine> visualizzaOrdiniAcquierente(String idUtente) {
-        UtenteLoggato utente = utenteRepository.findById(idUtente).orElseThrow(() -> new IllegalArgumentException("Utente non esistente"));
+        utenteRepository.findById(idUtente).orElseThrow(() -> new IllegalArgumentException("Utente non esistente"));
         return ordineRepository.findByIdAcquirente(idUtente);
     }
 

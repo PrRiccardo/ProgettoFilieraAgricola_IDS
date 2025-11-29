@@ -9,7 +9,6 @@ import unicam.filieraAgricola.repositories.UtenteRepository;
 
 import java.util.List;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 public class EventoService {
@@ -22,8 +21,8 @@ public class EventoService {
 
     public void creaEvento(String nome, String descrizione, String luogo, LocalDateTime dataInizio, LocalDateTime dataFine, String idAnimatore) {
 
-        Optional<UtenteLoggato> animatore = utenteRepository.findById(idAnimatore);
-        if(animatore.get().getRuolo()!= RuoloUtente.ANIMATORE){
+        UtenteLoggato animatore = utenteRepository.findById(idAnimatore).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
+        if(animatore.getRuolo()!= RuoloUtente.ANIMATORE){
             throw new IllegalArgumentException("Impossibile creare evento");
         }
 
@@ -32,14 +31,12 @@ public class EventoService {
     }
 
     public void eliminaEvento(String idEvento, String idAnimatore){
-        Optional<Evento> evento = eventoRepository.findById(idEvento);
-        Optional<UtenteLoggato> animatore = utenteRepository.findById(idAnimatore);
-        if(evento.isEmpty())
-            throw new IllegalArgumentException("Evento non trovato");
-        if(animatore.get().getRuolo()!= RuoloUtente.ANIMATORE){
+        Evento evento = eventoRepository.findById(idEvento).orElseThrow(() -> new IllegalArgumentException("Evento non trovato"));
+        UtenteLoggato animatore = utenteRepository.findById(idAnimatore).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
+        if(animatore.getRuolo()!= RuoloUtente.ANIMATORE){
             throw new IllegalArgumentException("Impossibile eliminare evento");
         }
-        eventoRepository.delete(evento.get());
+        eventoRepository.delete(evento);
     }
 
     public List<Evento> visualizzaEventi(){
@@ -47,9 +44,24 @@ public class EventoService {
     }
 
     public Evento cercaEvento(String idEvento){
-        Optional<Evento> evento = eventoRepository.findById(idEvento);
-        if(evento.isEmpty())
-            throw new IllegalArgumentException("Evento non trovato");
-        return evento.get();
+        return eventoRepository.findById(idEvento).orElseThrow(() -> new IllegalArgumentException("Evento non trovato"));
+    }
+
+    public void aggiungiIscritto(String idEvento, String idUtente){
+        Evento evento = eventoRepository.findById(idEvento).orElseThrow(() -> new IllegalArgumentException("Evento non trovato"));
+        UtenteLoggato acquirente = utenteRepository.findById(idUtente).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
+        if(acquirente.getRuolo() != RuoloUtente.ACQUIRENTE || evento.getUtentiIscritti().contains(acquirente))
+            throw new IllegalArgumentException("Impossibile aggiungere iscritto");
+        evento.aggiungiIscritto(acquirente);
+        eventoRepository.save(evento);
+    }
+
+    public void rimuoviIscritto(String idEvento, String idUtente){
+        Evento evento = eventoRepository.findById(idEvento).orElseThrow(() -> new IllegalArgumentException("Evento non trovato"));
+        UtenteLoggato acquirente = utenteRepository.findById(idUtente).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
+        if(acquirente.getRuolo() != RuoloUtente.ACQUIRENTE || !evento.getUtentiIscritti().contains(acquirente))
+            throw new IllegalArgumentException("Impossibile rimuovere iscritto");
+        evento.rimuoviIscritto(acquirente);
+        eventoRepository.save(evento);
     }
 }

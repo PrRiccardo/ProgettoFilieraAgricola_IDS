@@ -8,7 +8,6 @@ import unicam.filieraAgricola.Dto.DtoEvento;
 import unicam.filieraAgricola.models.Evento;
 import unicam.filieraAgricola.services.EventoService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -53,6 +52,26 @@ public class EventoController {
             return new ResponseEntity<>(eventoService.cercaEvento(idEvento), HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/aggiungiIscritto")
+    public ResponseEntity<String> aggiungiIscritto(@RequestBody String idEvento, @RequestParam String idAcquirente){
+        try{
+            eventoService.aggiungiIscritto(idEvento,idAcquirente);
+            return new ResponseEntity<>("Utente iscritto con successo", HttpStatus.OK);
+        }catch(Exception ex){
+            return new ResponseEntity<>("Utente non iscritto", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/rimuoviIscritto")
+    public ResponseEntity<String> rimuoviIscritto(@RequestBody String idEvento, @RequestParam String idAcquirente){
+        try{
+            eventoService.rimuoviIscritto(idEvento,idAcquirente);
+            return new ResponseEntity<>("Utente disiscritto con successo", HttpStatus.OK);
+        }catch(Exception ex){
+            return new ResponseEntity<>("Utente non disiscritto", HttpStatus.BAD_REQUEST);
         }
     }
 }

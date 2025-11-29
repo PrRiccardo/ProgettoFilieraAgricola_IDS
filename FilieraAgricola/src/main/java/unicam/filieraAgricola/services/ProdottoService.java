@@ -47,7 +47,7 @@ public class ProdottoService {
 
     public void EliminaProdotto(String idProdotto, String idVenditore) {
         Prodotto prodotto = prodottoRepository.findById(idProdotto).orElseThrow(() -> new IllegalArgumentException("Prodotto non trovato"));
-        UtenteLoggato venditore = utenteRepository.findById(idVenditore).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
+        utenteRepository.findById(idVenditore).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
         if(!prodotto.getIdVenditore().equals(idVenditore))
             throw new IllegalArgumentException("Impossibile eliminare il prodotto!");
         prodottoRepository.delete(prodotto);
