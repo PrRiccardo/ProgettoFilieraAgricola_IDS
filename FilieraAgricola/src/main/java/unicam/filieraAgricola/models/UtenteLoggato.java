@@ -15,11 +15,12 @@ public class UtenteLoggato {
     private RuoloUtente ruolo;
 
 
-    public UtenteLoggato(String nome, String cognome, String email, String password, RuoloUtente ruolo) {
+    public UtenteLoggato(String nome, String cognome, String email, String password, String telefono, RuoloUtente ruolo) {
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.password = password;
+        this.telefono = telefono;
         this.ruolo = ruolo;
     }
 
