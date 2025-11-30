@@ -39,6 +39,23 @@ public class EventoService {
         eventoRepository.delete(evento);
     }
 
+    public void modificaEvento(String nome, String descrizione, String luogo, LocalDateTime dataInizio, LocalDateTime dataFine, String idAnimatore,String idEvento ){
+        Evento evento = eventoRepository.findById(idEvento).orElseThrow(() -> new IllegalArgumentException("Evento non trovato"));
+        UtenteLoggato animatore = utenteRepository.findById(idAnimatore).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
+        if(animatore.getRuolo()!= RuoloUtente.ANIMATORE){
+            throw new IllegalArgumentException("Impossibile modificare l'evento");
+        }
+
+        evento.setNome(nome);
+        evento.setDescrizione(descrizione);
+        evento.setLuogo(luogo);
+        evento.setDataInizio(dataInizio);
+        evento.setDataFine(dataFine);
+
+        eventoRepository.save(evento);
+
+    }
+
     public List<Evento> visualizzaEventi(){
         return eventoRepository.findByDataInizioAfterAndDataFineBefore(LocalDateTime.now());
     }

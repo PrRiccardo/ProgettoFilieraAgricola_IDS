@@ -45,6 +45,35 @@ public class ProdottoService {
         prodottoRepository.save(pacchetto);
     }
 
+    public void ModificaProdottoSingolo(String nome, String descrizione, double prezzo, int quantita, String idVenditore,String idProdotto) {
+        ProdottoSingolo prodottoSingolo = prodottoRepository.findProdottoById(idProdotto).orElseThrow(() -> new IllegalArgumentException("Prodotto non trovato"));
+        utenteRepository.findById(idVenditore).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
+        if(!prodottoSingolo.getIdVenditore().equals(idVenditore))
+            throw new IllegalArgumentException("Impossibile modificare il prodotto!");
+
+        prodottoSingolo.setNome(nome);
+        prodottoSingolo.setDescrizione(descrizione);
+        prodottoSingolo.setPrezzo(prezzo);
+        prodottoSingolo.setQuantita(quantita);
+
+        prodottoRepository.save(prodottoSingolo);
+
+    }
+    public void ModificaPacchetto(String nome, String descrizione,int quantita, String idVenditore, String idProdotto, List<Prodotto> prodotti) {
+        PacchettoProdotti pacchetto = prodottoRepository.findPacchettoById(idProdotto).orElseThrow(() -> new IllegalArgumentException("Pacchetto non trovato"));
+        utenteRepository.findById(idVenditore).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
+        if(!pacchetto.getIdVenditore().equals(idVenditore))
+            throw new IllegalArgumentException("Impossibile modificare il pacchetto!");
+
+        pacchetto.setNome(nome);
+        pacchetto.setDescrizione(descrizione);
+        pacchetto.setQuantita(quantita);
+        pacchetto.setProdotti(prodotti);
+
+        prodottoRepository.save(pacchetto);
+
+    }
+
     public void EliminaProdotto(String idProdotto, String idVenditore) {
         Prodotto prodotto = prodottoRepository.findById(idProdotto).orElseThrow(() -> new IllegalArgumentException("Prodotto non trovato"));
         utenteRepository.findById(idVenditore).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));

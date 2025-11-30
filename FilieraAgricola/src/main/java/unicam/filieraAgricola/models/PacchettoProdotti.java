@@ -25,5 +25,9 @@ public class PacchettoProdotti extends Prodotto {
     public List<Prodotto> getProdotti() {
         return prodotti;
     }
+    public void  setProdotti(List<Prodotto> prodotti) {
+        this.prodotti = prodotti;
+        this.setPrezzo(calcolaPrezzoTotale());
+    }
 
 }

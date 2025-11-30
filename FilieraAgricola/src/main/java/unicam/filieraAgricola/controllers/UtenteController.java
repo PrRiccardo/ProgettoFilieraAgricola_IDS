@@ -44,5 +44,14 @@ public class UtenteController {
             return new ResponseEntity<>("Profilo non eliminato correttamente", HttpStatus.BAD_REQUEST);
         }
     }
+    @PostMapping("/modificaProfilo")
+    public ResponseEntity<String> modificaProfilo(@RequestParam DtoUtenteLoggato dtoUtenteLoggato){
+        try{
+            utenteService.ModificaProfilo(dtoUtenteLoggato.getNome(), dtoUtenteLoggato.getCognome(), dtoUtenteLoggato.getEmail(), dtoUtenteLoggato.getPassword(), dtoUtenteLoggato.getTelefono(), dtoUtenteLoggato.getRuolo());
+            return new ResponseEntity<>("Modifica avvenuta con successo", HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>("Modifica non avvenuta", HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }

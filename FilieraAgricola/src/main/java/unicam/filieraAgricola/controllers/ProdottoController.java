@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import unicam.filieraAgricola.Dto.DtoPacchettoProdotti;
 import unicam.filieraAgricola.Dto.DtoProdotto;
+import unicam.filieraAgricola.Dto.DtoProdottoSingolo;
 import unicam.filieraAgricola.models.Prodotto;
 import unicam.filieraAgricola.services.ProdottoService;
 
@@ -80,9 +81,27 @@ public class ProdottoController {
     public ResponseEntity<String> RifiutaProdotto(@RequestParam String idProdotto, @RequestParam String idCuratore, @RequestParam String motivoRifiuto) {
         try{
             prodottoService.RifiutaProdotto(idProdotto, idCuratore, motivoRifiuto);
-            return new ResponseEntity<>("Prodotto riutato", HttpStatus.OK);
+            return new ResponseEntity<>("Prodotto rifiutato", HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>("Rifiuto non avvenuto correttamente", HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/modificaProdotto")
+    public ResponseEntity<String> ModificaProdottoSingolo(@RequestParam DtoProdottoSingolo dtoProdottoSingolo, @RequestParam String idProdotto) {
+        try{
+            prodottoService.ModificaProdottoSingolo(dtoProdottoSingolo.getNome(), dtoProdottoSingolo.getDescrizione(), dtoProdottoSingolo.getPrezzo(),dtoProdottoSingolo.getQuantita(), dtoProdottoSingolo.getIdVenditore(),idProdotto);
+            return new ResponseEntity<>("Prodotto modificato", HttpStatus.OK);
+        }catch(Exception ex){
+            return new ResponseEntity<>("Modifica non avvenuta correttamente", HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/modificaPacchetto")
+    public ResponseEntity<String> ModificaPacchetto(@RequestParam DtoPacchettoProdotti dtoPacchettoProdotti, @RequestParam String idProdotto) {
+        try{
+            prodottoService.ModificaPacchetto(dtoPacchettoProdotti.getNome(), dtoPacchettoProdotti.getDescrizione(), dtoPacchettoProdotti.getQuantita(),dtoPacchettoProdotti.getIdVenditore(),idProdotto,dtoPacchettoProdotti.getProdotti());
+            return new ResponseEntity<>("Pacchetto modificato", HttpStatus.OK);
+        }catch(Exception ex){
+            return new ResponseEntity<>("Modifica non avvenuta correttamente", HttpStatus.BAD_REQUEST);
         }
     }
 

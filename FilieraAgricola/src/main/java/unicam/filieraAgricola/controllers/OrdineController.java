@@ -37,7 +37,7 @@ public class OrdineController {
     }
 
     @GetMapping("listaOrdiniAcquirente")
-    public ResponseEntity<List<Ordine>> visualizzaOrdiniAcquierente(@RequestParam String idUtente) {
+    public ResponseEntity<List<Ordine>> visualizzaOrdiniAcquirente(@RequestParam String idUtente) {
         try{
             return new ResponseEntity<>(ordineService.visualizzaOrdiniAcquierente(idUtente), HttpStatus.OK);
         }catch(Exception ex){

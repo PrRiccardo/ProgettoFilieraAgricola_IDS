@@ -30,5 +30,16 @@ public class UtenteService {
             throw new IllegalArgumentException("Impossibile eliminare l'utente");
         utenteRepository.delete(utente);
     }
+    public void ModificaProfilo(String nome, String cognome, String email, String password, String telefono, RuoloUtente ruolo) {
+        UtenteLoggato utente = utenteRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
 
+        utente.setNome(nome);
+        utente.setCognome(cognome);
+        utente.setEmail(email);
+        utente.setPassword(password);
+        utente.setTelefono(telefono);
+        utente.setRuolo(ruolo);
+
+        utenteRepository.save(utente);
+    }
 }
