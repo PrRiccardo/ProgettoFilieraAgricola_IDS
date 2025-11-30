@@ -51,7 +51,7 @@ public class Carrello {
         else
             carrello.add(componente);
     }
-    public void eliminaProdotto(String idProdotto)
+    public void rimuoviProdotto(String idProdotto)
     {
         carrello.removeIf(c -> c.getProdotto().getId().equals(idProdotto));
     }

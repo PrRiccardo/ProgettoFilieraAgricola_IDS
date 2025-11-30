@@ -14,17 +14,27 @@ public class CarrelloController {
     private CarrelloService carrelloService;
 
     @PostMapping("/aggiungiProdotto")
-    public ResponseEntity<String> aggiungiProdotto(@RequestParam String idProdotto, @RequestParam int quantita, @RequestParam String idCarrello) {
+    public ResponseEntity<String> aggiungiProdotto(@RequestParam String idProdotto, @RequestParam int quantita, @RequestParam String idCarrello, @RequestParam String idUtente) {
         try{
-            carrelloService.aggiungiProdotto(idProdotto, quantita, idCarrello);
+            carrelloService.aggiungiProdotto(idProdotto, quantita, idCarrello, idUtente);
             return new ResponseEntity<>("Prodotto aggiunto", HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>("Prodotto non aggiunto", HttpStatus.BAD_REQUEST);
         }
     }
 
+    @DeleteMapping("/rimuoviProdotto")
+    public ResponseEntity<String> rimuoviProdotto(@RequestParam String idProdotto, @RequestParam String idCarrello, @RequestParam String idUtente) {
+        try{
+            carrelloService.rimuoviProdotto(idProdotto, idCarrello, idUtente);
+            return new ResponseEntity<>("Prodotto rimosso", HttpStatus.OK);
+        }catch(Exception ex){
+            return new ResponseEntity<>("Prodotto non rimosso correttamente", HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @DeleteMapping("{idCarrello}")
-    public ResponseEntity<String> svuotaCarrello(@PathVariable String idCarrello,@RequestParam String idUtente) {
+    public ResponseEntity<String> svuotaCarrello(@PathVariable String idCarrello, @RequestParam String idUtente) {
         try{
             carrelloService.svuotaCarrello(idCarrello, idUtente);
             return new ResponseEntity<>("Carrello svuotato", HttpStatus.OK);

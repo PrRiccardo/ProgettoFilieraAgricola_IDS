@@ -34,4 +34,15 @@ public class UtenteController {
             return new ResponseEntity<>("Login non avvenuto", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @DeleteMapping("/eliminaProfilo")
+    public ResponseEntity<String> eliminaProfilo(@RequestParam String idUtente, @RequestParam String password){
+        try{
+            utenteService.eliminaProfilo(idUtente, password);
+            return new ResponseEntity<>("Profilo eliminato con successo", HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>("Profilo non eliminato correttamente", HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

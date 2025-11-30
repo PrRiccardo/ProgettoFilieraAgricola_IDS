@@ -18,14 +18,26 @@ public class CarrelloService {
     @Autowired
     private ProdottoRepository prodottoRepository;
 
-    public void aggiungiProdotto(String idProdotto, int quantita, String idCarrello) {
+    public void aggiungiProdotto(String idProdotto, int quantita, String idCarrello, String idUtente) {
         Carrello carrello = carrelloRepository.findById(idCarrello).orElseThrow(() -> new IllegalArgumentException("Carrello non trovato"));
         Prodotto prodotto = prodottoRepository.findById(idProdotto).orElseThrow(() -> new IllegalArgumentException("Prodotto non trovato"));
+        if(!carrello.getUtente().getIdUtente().equals(idUtente))
+            throw  new IllegalArgumentException("Impossibile aggiungere prodotto");
         if(prodotto instanceof ProdottoSingolo prodottoSingolo)
             if(!prodottoSingolo.getStatoProdotto().equals(StatoProdotto.APPROVATO))
                 throw new IllegalArgumentException("Prodotto non approvato");
 
         carrello.aggiungiProdotto(prodotto, quantita);
+        carrelloRepository.save(carrello);
+    }
+
+    public void rimuoviProdotto(String idProdotto, String idCarrello, String idUtente) {
+        Carrello carrello = carrelloRepository.findById(idCarrello).orElseThrow(() -> new IllegalArgumentException("Carrello non trovato"));
+        prodottoRepository.findById(idProdotto).orElseThrow(() -> new IllegalArgumentException("Prodotto non trovato"));
+        if(!carrello.getUtente().getIdUtente().equals(idUtente))
+            throw  new IllegalArgumentException("Impossibile rimuovere prodotto");
+
+        carrello.rimuoviProdotto(idProdotto);
         carrelloRepository.save(carrello);
     }
 

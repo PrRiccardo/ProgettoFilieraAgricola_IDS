@@ -24,4 +24,11 @@ public class UtenteService {
         utenteRepository.findByEmailAndPassword(email, password).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
     }
 
+    public void eliminaProfilo(String idUtente, String password) {
+        UtenteLoggato utente = utenteRepository.findById(idUtente).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
+        if(!utente.getPassword().equals(password))
+            throw new IllegalArgumentException("Impossibile eliminare l'utente");
+        utenteRepository.delete(utente);
+    }
+
 }
