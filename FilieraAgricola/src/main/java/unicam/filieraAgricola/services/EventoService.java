@@ -7,6 +7,7 @@ import unicam.filieraAgricola.repositories.EventoRepository;
 import unicam.filieraAgricola.models.RuoloUtente;
 import unicam.filieraAgricola.repositories.UtenteRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDateTime;
 
@@ -28,6 +29,7 @@ public class EventoService {
 
         Evento evento = new Evento(nome, descrizione, luogo, dataInizio, dataFine,idAnimatore);
         eventoRepository.save(evento);
+        notifyObservers(evento);
     }
 
     public void eliminaEvento(String idEvento, String idAnimatore){
@@ -81,4 +83,18 @@ public class EventoService {
         evento.rimuoviIscritto(acquirente);
         eventoRepository.save(evento);
     }
+
+
+    private final List<ObserverService> observers = new ArrayList<ObserverService>();
+
+    public void nuovoObserver(ObserverService observer) {
+        this.observers.add(observer);
+    }
+
+    private void notifyObservers(Evento evento) {
+        for (ObserverService observer : observers) {
+            observer.notificaNuovoEvento(evento);
+        }
+    }
+
 }
