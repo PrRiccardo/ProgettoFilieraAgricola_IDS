@@ -10,5 +10,6 @@ import java.util.List;
 
 @Repository
 public interface OrdineRepository extends MongoRepository<Ordine, String> {
+
     List<Ordine> findByIdAcquirente(String idAcquirente);
 }

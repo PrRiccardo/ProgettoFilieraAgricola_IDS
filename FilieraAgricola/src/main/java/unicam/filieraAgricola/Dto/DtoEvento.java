@@ -14,6 +14,7 @@ public class DtoEvento {
     private LocalDateTime dataInizio;
     private LocalDateTime dataFine;
     private String idAnimatore;
+
     public DtoEvento() {}
 
     public DtoEvento(String nome, String descrizione, String luogo, LocalDateTime dataInizio, LocalDateTime dataFine, String idAnimatore) {
@@ -40,7 +41,7 @@ public class DtoEvento {
     public String getLuogo() {return this.luogo;}
     public LocalDateTime getDataInizio() {return this.dataInizio;}
     public LocalDateTime getDataFine() {return this.dataFine;}
-    public String getAnimatore() {return this.idAnimatore;}
+    public String getIdAnimatore() {return this.idAnimatore;}
 
 
 

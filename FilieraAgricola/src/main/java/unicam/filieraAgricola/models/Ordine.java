@@ -14,7 +14,6 @@ public class Ordine {
     @DBRef
     private final Carrello carrello;
 
-    @DBRef
     private String idAcquirente;
 
     private double prezzoTotale;
@@ -24,12 +23,13 @@ public class Ordine {
     @CreatedDate
     private LocalDateTime dataPagamento;
 
-    public Ordine(Carrello carrello, String idAcquirente, double prezzoTotale, String indirizzo, String metodoPagamento) {
+    public Ordine(Carrello carrello, String idAcquirente, double prezzoTotale, String indirizzo, String metodoPagamento, LocalDateTime dataPagamento) {
         this.carrello = carrello;
         this.idAcquirente = idAcquirente;
         this.prezzoTotale = prezzoTotale;
         this.Indirizzo = indirizzo;
         this.metodoPagamento = metodoPagamento;
+        this.dataPagamento = dataPagamento;
     }
 
     public Ordine() {

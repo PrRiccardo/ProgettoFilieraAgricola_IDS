@@ -16,7 +16,7 @@ public class UtenteController {
     private UtenteService utenteService;
 
     @PostMapping("/registraUtente")
-    public ResponseEntity<String> registraUtente(@RequestParam DtoUtenteLoggato dtoUtenteLoggato){
+    public ResponseEntity<String> registraUtente(@RequestBody DtoUtenteLoggato dtoUtenteLoggato){
         try{
             utenteService.Registrazione(dtoUtenteLoggato.getNome(), dtoUtenteLoggato.getCognome(), dtoUtenteLoggato.getEmail(), dtoUtenteLoggato.getPassword(), dtoUtenteLoggato.getTelefono(), dtoUtenteLoggato.getRuolo());
             return new ResponseEntity<>("Registrazione avvenuta con successo", HttpStatus.OK);
@@ -39,13 +39,13 @@ public class UtenteController {
     public ResponseEntity<String> eliminaProfilo(@RequestParam String idUtente, @RequestParam String password){
         try{
             utenteService.eliminaProfilo(idUtente, password);
-            return new ResponseEntity<>("Profilo eliminato con successo", HttpStatus.OK);
+            return new ResponseEntity<>("Profilo eliminato", HttpStatus.OK);
         }catch(Exception e){
-            return new ResponseEntity<>("Profilo non eliminato correttamente", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Profilo non eliminato", HttpStatus.BAD_REQUEST);
         }
     }
     @PostMapping("/modificaProfilo")
-    public ResponseEntity<String> modificaProfilo(@RequestParam DtoUtenteLoggato dtoUtenteLoggato){
+    public ResponseEntity<String> modificaProfilo(@RequestBody DtoUtenteLoggato dtoUtenteLoggato){
         try{
             utenteService.ModificaProfilo(dtoUtenteLoggato.getNome(), dtoUtenteLoggato.getCognome(), dtoUtenteLoggato.getEmail(), dtoUtenteLoggato.getPassword(), dtoUtenteLoggato.getTelefono(), dtoUtenteLoggato.getRuolo());
             return new ResponseEntity<>("Modifica avvenuta con successo", HttpStatus.OK);

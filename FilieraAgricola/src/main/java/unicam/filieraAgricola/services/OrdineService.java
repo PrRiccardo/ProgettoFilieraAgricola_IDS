@@ -9,6 +9,7 @@ import unicam.filieraAgricola.repositories.CarrelloRepository;
 import unicam.filieraAgricola.repositories.OrdineRepository;
 import unicam.filieraAgricola.repositories.UtenteRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,18 +29,19 @@ public class OrdineService {
 
     public void creaOrdine(String idCarrello, String idAcquirente, String indirizzo, String metodoPagamento) {
         Carrello carrello = carrelloRepository.findById(idCarrello).orElseThrow(() -> new IllegalArgumentException("Carrello non esistente"));
+
         if(carrello.getCarrello().isEmpty())
             throw new IllegalArgumentException("Carrello vuoto");
 
         if(utenteRepository.findById(idAcquirente).isEmpty())
             throw new IllegalArgumentException("Utente non trovato");
 
-        Ordine ordine = new Ordine(carrello, idAcquirente, carrello.getPrezzoTotale(), indirizzo, metodoPagamento);
+        Ordine ordine = new Ordine(carrello, idAcquirente, carrello.getPrezzoTotale(), indirizzo, metodoPagamento, LocalDateTime.now());
         carrelloService.svuotaCarrello(carrello.getId(), idAcquirente);
         ordineRepository.save(ordine);
     }
 
-    public void eliminaOrdine(String idUtente, String idOrdine) {
+    public void eliminaOrdine(String idOrdine, String idUtente) {
         UtenteLoggato utente = utenteRepository.findById(idUtente).orElseThrow(() -> new IllegalArgumentException("Utente non esistente"));
         Ordine ordine = ordineRepository.findById(idOrdine).orElseThrow(() -> new IllegalArgumentException("Ordine non esistente"));
         if(!utente.getIdUtente().equals(ordine.getAquirente()))

@@ -17,7 +17,7 @@ public class OrdineController {
     private OrdineService ordineService;
 
     @PostMapping("/creaOrdine")
-    public ResponseEntity<String> CreaOrdine(@RequestParam String idCarrello, @RequestParam String idUtente, @RequestParam String indirizzo,@RequestParam String metodoDiPagamento) {
+    public ResponseEntity<String> CreaOrdine(@RequestParam String idCarrello, @RequestParam String idUtente, @RequestParam String indirizzo, @RequestParam String metodoDiPagamento) {
         try{
             ordineService.creaOrdine(idCarrello, idUtente, indirizzo, metodoDiPagamento);
             return new ResponseEntity<>("Ordine creato", HttpStatus.OK);
@@ -27,12 +27,12 @@ public class OrdineController {
     }
 
     @DeleteMapping("{idOrdine}")
-    public ResponseEntity<String> EliminaOrdine(@PathVariable String idCarrello, @RequestParam String idUtente) {
+    public ResponseEntity<String> EliminaOrdine(@PathVariable String idOrdine, @RequestParam String idUtente) {
         try{
-            ordineService.eliminaOrdine(idCarrello, idUtente);
-            return new ResponseEntity<>("Ordine creato", HttpStatus.OK);
+            ordineService.eliminaOrdine(idOrdine, idUtente);
+            return new ResponseEntity<>("Ordine eliminato", HttpStatus.OK);
         }catch(Exception ex){
-            return new ResponseEntity<>("Ordine non creato", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Ordine non eliminato", HttpStatus.BAD_REQUEST);
         }
     }
 

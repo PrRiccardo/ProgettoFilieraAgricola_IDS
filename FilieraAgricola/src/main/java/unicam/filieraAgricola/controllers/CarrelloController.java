@@ -29,7 +29,7 @@ public class CarrelloController {
             carrelloService.rimuoviProdotto(idProdotto, idCarrello, idUtente);
             return new ResponseEntity<>("Prodotto rimosso", HttpStatus.OK);
         }catch(Exception ex){
-            return new ResponseEntity<>("Prodotto non rimosso correttamente", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Prodotto non rimosso", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -39,7 +39,7 @@ public class CarrelloController {
             carrelloService.svuotaCarrello(idCarrello, idUtente);
             return new ResponseEntity<>("Carrello svuotato", HttpStatus.OK);
         }catch(Exception ex){
-            return new ResponseEntity<>("Prodotto non svuotato", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Carrello non svuotato", HttpStatus.BAD_REQUEST);
         }
     }
 }

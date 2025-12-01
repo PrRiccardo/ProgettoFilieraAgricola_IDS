@@ -12,13 +12,12 @@ public class Evento {
 
      @Id
     private String id;
+
     private String nome;
     private String descrizione;
     private String luogo;
     private LocalDateTime dataInizio;
     private LocalDateTime dataFine;
-
-    @DBRef
     private String idAnimatore;
 
     @DBRef
@@ -59,10 +58,18 @@ public class Evento {
     public void setAnimatore(String animatore) {this.idAnimatore = animatore;}
 
     public List<UtenteLoggato> getUtentiIscritti() {return utentiIscritti;}
+
     public void aggiungiIscritto(UtenteLoggato acquirente) {
         this.utentiIscritti.add(acquirente);
     }
+
     public void rimuoviIscritto(UtenteLoggato acquirente) {
-        this.utentiIscritti.remove(acquirente);
+        for(int i = 0; i < utentiIscritti.size(); i++)
+            if(utentiIscritti.get(i).getIdUtente().equals(acquirente.getIdUtente())) {
+                utentiIscritti.remove(i);
+                return;
+            }
     }
+
+
 }

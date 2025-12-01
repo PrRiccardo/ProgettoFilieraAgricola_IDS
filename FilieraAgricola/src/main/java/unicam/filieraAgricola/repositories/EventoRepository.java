@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface EventoRepository extends MongoRepository<Evento, String> {
 
-    List<Evento> findByDataInizioAfterAndDataFineBefore(LocalDateTime data);
+    List<Evento> findByDataInizioAfter(LocalDateTime data);
+    List<Evento> findByLuogoAndDataFineGreaterThanAndDataInizioLessThan(String luogo, LocalDateTime dataFine, LocalDateTime dataInizio);
 }

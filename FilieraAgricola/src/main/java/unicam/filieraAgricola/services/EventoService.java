@@ -27,7 +27,10 @@ public class EventoService {
             throw new IllegalArgumentException("Impossibile creare evento");
         }
 
-        Evento evento = new Evento(nome, descrizione, luogo, dataInizio, dataFine,idAnimatore);
+        if(!eventoRepository.findByLuogoAndDataFineGreaterThanAndDataInizioLessThan(luogo, dataFine, dataInizio).isEmpty())
+            throw new IllegalArgumentException("Luogo già occupato in questo periodo");
+
+        Evento evento = new Evento(nome, descrizione, luogo, dataInizio, dataFine, idAnimatore);
         eventoRepository.save(evento);
         notifyObservers(evento);
     }
@@ -59,7 +62,7 @@ public class EventoService {
     }
 
     public List<Evento> visualizzaEventi(){
-        return eventoRepository.findByDataInizioAfterAndDataFineBefore(LocalDateTime.now());
+        return eventoRepository.findByDataInizioAfter(LocalDateTime.now());
     }
 
     public Evento cercaEvento(String idEvento){
@@ -69,8 +72,14 @@ public class EventoService {
     public void aggiungiIscritto(String idEvento, String idUtente){
         Evento evento = eventoRepository.findById(idEvento).orElseThrow(() -> new IllegalArgumentException("Evento non trovato"));
         UtenteLoggato acquirente = utenteRepository.findById(idUtente).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
-        if(acquirente.getRuolo() != RuoloUtente.ACQUIRENTE || evento.getUtentiIscritti().contains(acquirente))
+
+        if(acquirente.getRuolo() != RuoloUtente.ACQUIRENTE)
             throw new IllegalArgumentException("Impossibile aggiungere iscritto");
+
+        for(UtenteLoggato u : evento.getUtentiIscritti())
+            if(u.getIdUtente().equals(acquirente.getIdUtente()))
+                throw new IllegalArgumentException("Utente già iscritto");
+
         evento.aggiungiIscritto(acquirente);
         eventoRepository.save(evento);
     }
@@ -78,10 +87,15 @@ public class EventoService {
     public void rimuoviIscritto(String idEvento, String idUtente){
         Evento evento = eventoRepository.findById(idEvento).orElseThrow(() -> new IllegalArgumentException("Evento non trovato"));
         UtenteLoggato acquirente = utenteRepository.findById(idUtente).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
-        if(acquirente.getRuolo() != RuoloUtente.ACQUIRENTE || !evento.getUtentiIscritti().contains(acquirente))
-            throw new IllegalArgumentException("Impossibile rimuovere iscritto");
-        evento.rimuoviIscritto(acquirente);
-        eventoRepository.save(evento);
+
+        for(UtenteLoggato u : evento.getUtentiIscritti())
+            if(u.getIdUtente().equals(acquirente.getIdUtente())) {
+                evento.rimuoviIscritto(acquirente);
+                eventoRepository.save(evento);
+                return;
+            }
+
+        throw new IllegalArgumentException("Utente già iscritto");
     }
 
 

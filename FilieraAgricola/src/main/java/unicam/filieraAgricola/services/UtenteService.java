@@ -2,6 +2,7 @@ package unicam.filieraAgricola.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import unicam.filieraAgricola.models.Carrello;
 import unicam.filieraAgricola.models.RuoloUtente;
 import unicam.filieraAgricola.models.UtenteLoggato;
 import unicam.filieraAgricola.repositories.UtenteRepository;
@@ -12,12 +13,18 @@ public class UtenteService {
     @Autowired
     private UtenteRepository utenteRepository;
 
+    @Autowired
+    private CarrelloService carrelloService;
+
     public void Registrazione(String nome, String cognome, String email, String password, String telefono, RuoloUtente ruolo) {
         UtenteLoggato utente = new UtenteLoggato(nome, cognome, email, password, telefono, ruolo);
-        if(!utenteRepository.findByEmail(email).isEmpty())
+        if(utenteRepository.findByEmail(email).isPresent())
             throw new IllegalArgumentException("Utente già esistente");
 
         utenteRepository.save(utente);
+
+        if(utente.getRuolo() == RuoloUtente.ACQUIRENTE)
+            carrelloService.creaCarrello(utenteRepository.findByEmail(email).get().getIdUtente());
     }
 
     public void Login(String email, String password) {

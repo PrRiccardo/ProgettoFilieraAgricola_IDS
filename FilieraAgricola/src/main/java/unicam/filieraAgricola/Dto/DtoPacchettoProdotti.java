@@ -4,24 +4,23 @@ import unicam.filieraAgricola.models.PacchettoProdotti;
 import unicam.filieraAgricola.models.Prodotto;
 import unicam.filieraAgricola.models.ProdottoSingolo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DtoPacchettoProdotti extends  DtoProdotto {
 
-    private List<Prodotto> prodotti;
+    private List<String> prodotti;
 
-    public DtoPacchettoProdotti() {}
+    public DtoPacchettoProdotti() {
+        this.prodotti = new ArrayList<String>();
+    }
 
-    public DtoPacchettoProdotti(String nome,String descrizione, double prezzo, int quantita, String idVenditore) {
-        super(nome, descrizione, prezzo, quantita,idVenditore);
+    public DtoPacchettoProdotti(String nome, String descrizione, int quantita, String idVenditore, List<String> prodotti) {
+        super(nome, descrizione, 0, quantita,idVenditore);
         this.prodotti = prodotti;
     }
-        public DtoPacchettoProdotti(PacchettoProdotti pacchettoProdotti) {
-        super(pacchettoProdotti);
-        this.prodotti = pacchettoProdotti.getProdotti();
-        }
 
-    public List<Prodotto> getProdotti() {
+    public List<String> getIdProdotti() {
         return prodotti;
     }
 }

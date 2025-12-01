@@ -20,7 +20,7 @@ public class EventoController {
     @PostMapping("/pubblicaEvento")
     public ResponseEntity<String> pubblicaEvento(@RequestBody DtoEvento dtoEvento){
         try {
-            eventoService.creaEvento(dtoEvento.getNome(), dtoEvento.getDescrizione(), dtoEvento.getLuogo(), dtoEvento.getDataInizio(),dtoEvento.getDataFine(),dtoEvento.getAnimatore());
+            eventoService.creaEvento(dtoEvento.getNome(), dtoEvento.getDescrizione(), dtoEvento.getLuogo(), dtoEvento.getDataInizio(),dtoEvento.getDataFine(),dtoEvento.getIdAnimatore());
             return new ResponseEntity<>("Evento creato", HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>("Evento non creato", HttpStatus.BAD_REQUEST);
@@ -29,19 +29,19 @@ public class EventoController {
     @PostMapping("/modificaEvento")
     public ResponseEntity<String> modificaEvento(@RequestBody DtoEvento dtoEvento, @RequestParam String idEvento){
         try {
-            eventoService.modificaEvento(dtoEvento.getNome(), dtoEvento.getDescrizione(), dtoEvento.getLuogo(), dtoEvento.getDataInizio(),dtoEvento.getDataFine(),dtoEvento.getAnimatore(),idEvento);
-            return new ResponseEntity<>("Evento creato", HttpStatus.OK);
+            eventoService.modificaEvento(dtoEvento.getNome(), dtoEvento.getDescrizione(), dtoEvento.getLuogo(), dtoEvento.getDataInizio(),dtoEvento.getDataFine(),dtoEvento.getIdAnimatore(),idEvento);
+            return new ResponseEntity<>("Evento modificato", HttpStatus.OK);
         }catch(Exception ex){
-            return new ResponseEntity<>("Evento non creato", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Evento non modificato", HttpStatus.BAD_REQUEST);
         }
     }
     @DeleteMapping("{idEvento}")
     public ResponseEntity<String> eliminaEvento(@PathVariable  String idEvento, @RequestParam String idAnimatore){
         try{
             eventoService.eliminaEvento(idEvento,idAnimatore);
-            return new ResponseEntity<>("Evento eliminato con successo", HttpStatus.OK);
+            return new ResponseEntity<>("Evento eliminato", HttpStatus.OK);
         }catch(Exception ex){
-            return new ResponseEntity<>("Evento non eliminato correttamente", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Evento non eliminato", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -64,20 +64,20 @@ public class EventoController {
     }
 
     @PostMapping("/aggiungiIscritto")
-    public ResponseEntity<String> aggiungiIscritto(@RequestBody String idEvento, @RequestParam String idAcquirente){
+    public ResponseEntity<String> aggiungiIscritto(@RequestParam String idEvento, @RequestParam String idAcquirente){
         try{
             eventoService.aggiungiIscritto(idEvento,idAcquirente);
-            return new ResponseEntity<>("Utente iscritto con successo", HttpStatus.OK);
+            return new ResponseEntity<>("Utente iscritto", HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>("Utente non iscritto", HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/rimuoviIscritto")
-    public ResponseEntity<String> rimuoviIscritto(@RequestBody String idEvento, @RequestParam String idAcquirente){
+    public ResponseEntity<String> rimuoviIscritto(@RequestParam String idEvento, @RequestParam String idAcquirente){
         try{
             eventoService.rimuoviIscritto(idEvento,idAcquirente);
-            return new ResponseEntity<>("Utente disiscritto con successo", HttpStatus.OK);
+            return new ResponseEntity<>("Utente disiscritto", HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>("Utente non disiscritto", HttpStatus.BAD_REQUEST);
         }

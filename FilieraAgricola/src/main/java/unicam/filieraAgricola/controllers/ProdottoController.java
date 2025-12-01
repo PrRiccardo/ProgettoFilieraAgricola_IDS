@@ -32,7 +32,7 @@ public class ProdottoController {
     @PostMapping("/creaPacchetto")
     public ResponseEntity<String> CreaPacchetto(@RequestBody DtoPacchettoProdotti dtoPacchettoProdotti) {
         try {
-            prodottoService.CreaPacchetto(dtoPacchettoProdotti.getNome(), dtoPacchettoProdotti.getDescrizione(), dtoPacchettoProdotti.getQuantita(), dtoPacchettoProdotti.getIdVenditore(), dtoPacchettoProdotti.getProdotti());
+            prodottoService.CreaPacchetto(dtoPacchettoProdotti.getNome(), dtoPacchettoProdotti.getDescrizione(), dtoPacchettoProdotti.getQuantita(), dtoPacchettoProdotti.getIdVenditore(), dtoPacchettoProdotti.getIdProdotti());
             return new ResponseEntity<>("Pacchetto creato", HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>("Pacchetto non creato", HttpStatus.BAD_REQUEST);
@@ -73,7 +73,7 @@ public class ProdottoController {
             prodottoService.ApprovaProdotto(idProdotto, idCuratore);
             return new ResponseEntity<>("Prodotto approvato", HttpStatus.OK);
         }catch(Exception ex){
-            return new ResponseEntity<>("Approvazione non avvenuta correttamente", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Prodotto non approvato", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -83,25 +83,25 @@ public class ProdottoController {
             prodottoService.RifiutaProdotto(idProdotto, idCuratore, motivoRifiuto);
             return new ResponseEntity<>("Prodotto rifiutato", HttpStatus.OK);
         }catch(Exception ex){
-            return new ResponseEntity<>("Rifiuto non avvenuto correttamente", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Prodotto non rifiutato", HttpStatus.BAD_REQUEST);
         }
     }
     @PostMapping("/modificaProdotto")
-    public ResponseEntity<String> ModificaProdottoSingolo(@RequestParam DtoProdottoSingolo dtoProdottoSingolo, @RequestParam String idProdotto) {
+    public ResponseEntity<String> ModificaProdottoSingolo(@RequestBody DtoProdottoSingolo dtoProdottoSingolo, @RequestParam String idProdotto) {
         try{
             prodottoService.ModificaProdottoSingolo(dtoProdottoSingolo.getNome(), dtoProdottoSingolo.getDescrizione(), dtoProdottoSingolo.getPrezzo(),dtoProdottoSingolo.getQuantita(), dtoProdottoSingolo.getIdVenditore(),idProdotto);
             return new ResponseEntity<>("Prodotto modificato", HttpStatus.OK);
         }catch(Exception ex){
-            return new ResponseEntity<>("Modifica non avvenuta correttamente", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Prodotto non modificato", HttpStatus.BAD_REQUEST);
         }
     }
     @PostMapping("/modificaPacchetto")
-    public ResponseEntity<String> ModificaPacchetto(@RequestParam DtoPacchettoProdotti dtoPacchettoProdotti, @RequestParam String idProdotto) {
+    public ResponseEntity<String> ModificaPacchetto(@RequestBody DtoPacchettoProdotti dtoPacchettoProdotti, @RequestParam String idProdotto) {
         try{
-            prodottoService.ModificaPacchetto(dtoPacchettoProdotti.getNome(), dtoPacchettoProdotti.getDescrizione(), dtoPacchettoProdotti.getQuantita(),dtoPacchettoProdotti.getIdVenditore(),idProdotto,dtoPacchettoProdotti.getProdotti());
+            prodottoService.ModificaPacchetto(dtoPacchettoProdotti.getNome(), dtoPacchettoProdotti.getDescrizione(), dtoPacchettoProdotti.getQuantita(),dtoPacchettoProdotti.getIdVenditore(),idProdotto,dtoPacchettoProdotti.getIdProdotti());
             return new ResponseEntity<>("Pacchetto modificato", HttpStatus.OK);
         }catch(Exception ex){
-            return new ResponseEntity<>("Modifica non avvenuta correttamente", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Pacchetto non modificato", HttpStatus.BAD_REQUEST);
         }
     }
 

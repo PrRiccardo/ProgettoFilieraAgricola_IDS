@@ -6,7 +6,9 @@ import unicam.filieraAgricola.models.*;
 import unicam.filieraAgricola.repositories.ProdottoRepository;
 import unicam.filieraAgricola.repositories.UtenteRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProdottoService {
@@ -21,17 +23,25 @@ public class ProdottoService {
         UtenteLoggato venditore = utenteRepository.findById(idVenditore).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
         if(venditore.getRuolo() != RuoloUtente.VENDITORE)
             throw new IllegalArgumentException("Impossibile creare il prodotto!");
-        if(!prodottoRepository.findProdottoByNomeAndPrezzoAndIdVenditore(nome, prezzo, idVenditore).isEmpty())
+        Optional<Prodotto> duplicato = prodottoRepository.findByNomeAndIdVenditore(nome, idVenditore);
+        if(duplicato.isPresent())
             throw new IllegalArgumentException("Prodotto esistente!");
 
         ProdottoSingolo prodotto = new ProdottoSingolo(nome, descrizione, prezzo, quantita, idVenditore);
         prodottoRepository.save(prodotto);
     }
 
-    public void CreaPacchetto(String nome, String descrizione, int quantita, String idVenditore, List<Prodotto> prodotti) {
+    public void CreaPacchetto(String nome, String descrizione, int quantita, String idVenditore, List<String> idProdotti) {
         UtenteLoggato distributore = utenteRepository.findById(idVenditore).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
         if(distributore.getRuolo() != RuoloUtente.DISTRIBUTORE)
             throw new IllegalArgumentException("Impossibile creare il pacchetto!");
+
+        List<Prodotto> prodotti = new ArrayList<>();
+        for (String id : idProdotti) {
+            Prodotto p = prodottoRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Prodotto componente non trovato con ID: " + id));
+            prodotti.add(p);
+        }
 
         for(Prodotto p : prodotti) {
             if(p instanceof ProdottoSingolo prodottoSingolo)
@@ -40,13 +50,17 @@ public class ProdottoService {
         }
 
         PacchettoProdotti pacchetto = new PacchettoProdotti(nome, descrizione, quantita, idVenditore, prodotti);
-        if(!prodottoRepository.findPacchettoByNomeAndPrezzoAndIdVenditore(nome, pacchetto.getPrezzo(), idVenditore).isEmpty())
+
+
+        Optional<Prodotto> duplicato = prodottoRepository.findByNomeAndIdVenditore(nome, idVenditore);
+        if(duplicato.isPresent())
             throw new IllegalArgumentException("Prodotto esistente!");
+
         prodottoRepository.save(pacchetto);
     }
 
     public void ModificaProdottoSingolo(String nome, String descrizione, double prezzo, int quantita, String idVenditore,String idProdotto) {
-        ProdottoSingolo prodottoSingolo = prodottoRepository.findProdottoById(idProdotto).orElseThrow(() -> new IllegalArgumentException("Prodotto non trovato"));
+        ProdottoSingolo prodottoSingolo = findProdottoSingoloById(idProdotto);
         utenteRepository.findById(idVenditore).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
         if(!prodottoSingolo.getIdVenditore().equals(idVenditore))
             throw new IllegalArgumentException("Impossibile modificare il prodotto!");
@@ -59,11 +73,18 @@ public class ProdottoService {
         prodottoRepository.save(prodottoSingolo);
 
     }
-    public void ModificaPacchetto(String nome, String descrizione,int quantita, String idVenditore, String idProdotto, List<Prodotto> prodotti) {
-        PacchettoProdotti pacchetto = prodottoRepository.findPacchettoById(idProdotto).orElseThrow(() -> new IllegalArgumentException("Pacchetto non trovato"));
+    public void ModificaPacchetto(String nome, String descrizione,int quantita, String idVenditore, String idProdotto, List<String> idProdotti) {
+        PacchettoProdotti pacchetto = findPacchettoById(idProdotto);
         utenteRepository.findById(idVenditore).orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
         if(!pacchetto.getIdVenditore().equals(idVenditore))
             throw new IllegalArgumentException("Impossibile modificare il pacchetto!");
+
+        List<Prodotto> prodotti = new ArrayList<>();
+        for (String id : idProdotti) {
+            Prodotto p = prodottoRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Prodotto componente non trovato con ID: " + id));
+            prodotti.add(p);
+        }
 
         pacchetto.setNome(nome);
         pacchetto.setDescrizione(descrizione);
@@ -84,13 +105,16 @@ public class ProdottoService {
 
     public List<Prodotto> VisualizzaListaProdotti() {
         List<Prodotto> prodotti = prodottoRepository.findAll();
+        List<Prodotto> prodottiFiltrati = new ArrayList<Prodotto>();
         for(Prodotto p : prodotti) {
             if(p instanceof ProdottoSingolo prodottoSingolo) {
-                if(prodottoSingolo.getStatoProdotto() != StatoProdotto.APPROVATO)
-                    prodotti.remove(prodottoSingolo);
+                if(prodottoSingolo.getStatoProdotto() == StatoProdotto.APPROVATO)
+                    prodottiFiltrati.add(prodottoSingolo);
             }
+            else
+                prodottiFiltrati.add(p);
         }
-        return prodotti;
+        return prodottiFiltrati;
     }
 
     public Prodotto CercaProdotto(String idProdotto) {
@@ -103,8 +127,10 @@ public class ProdottoService {
         if(curatore.getRuolo() != RuoloUtente.CURATORE)
             throw new IllegalArgumentException("Impossibile verificare il prodotto!");
 
-        ProdottoSingolo prodotto = prodottoRepository.findProdottoById(idProdotto).
-                orElseThrow(() -> new IllegalArgumentException("Prodotto non trovato"));
+        ProdottoSingolo prodotto = findProdottoSingoloById(idProdotto);
+        if(prodotto.getStatoProdotto() != StatoProdotto.IN_ATTESA_APPROVAZIONE)
+            throw new IllegalArgumentException("Prodotto non in attesa di approvazione");
+
         prodotto.setStatoProdotto(StatoProdotto.APPROVATO);
         prodottoRepository.save(prodotto);
     }
@@ -114,10 +140,27 @@ public class ProdottoService {
         if(curatore.getRuolo() != RuoloUtente.CURATORE)
             throw new IllegalArgumentException("Impossibile verificare il prodotto!");
 
-        ProdottoSingolo prodotto = prodottoRepository.findProdottoById(idProdotto).
-                orElseThrow(() -> new IllegalArgumentException("Prodotto non trovato"));
+        ProdottoSingolo prodotto = findProdottoSingoloById(idProdotto);
+        if(prodotto.getStatoProdotto() != StatoProdotto.IN_ATTESA_APPROVAZIONE)
+            throw new IllegalArgumentException("Prodotto non in attesa di approvazione");
+
         prodotto.setStatoProdotto(StatoProdotto.RIFIUTATO);
         prodotto.setMotivoRifiuto(motivoRifiuto);
         prodottoRepository.save(prodotto);
     }
+
+    public ProdottoSingolo findProdottoSingoloById(String idProdotto) {
+        Prodotto prodotto = prodottoRepository.findById(idProdotto).orElseThrow(() -> new IllegalArgumentException("Prodotto non trovato"));
+        if(prodotto instanceof ProdottoSingolo prodottoSingolo)
+            return prodottoSingolo;
+        throw new IllegalArgumentException("Impossibile verificare il prodotto!");
+    }
+
+    public PacchettoProdotti findPacchettoById(String idProdotto) {
+        Prodotto prodotto = prodottoRepository.findById(idProdotto).orElseThrow(() -> new IllegalArgumentException("Pacchetto non trovato"));
+        if(prodotto instanceof PacchettoProdotti pacchettoProdotti)
+            return pacchettoProdotti;
+        throw new IllegalArgumentException("Impossibile verificare il pacchetto!");
+    }
+
 }

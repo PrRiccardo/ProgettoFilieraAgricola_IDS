@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 public abstract class Prodotto {
 
     @Id
-    private String idProdotto;
+    private String id;
 
     private String nome;
     private String descrizione;
@@ -26,10 +26,10 @@ public abstract class Prodotto {
     public Prodotto() {}
 
     public String getId() {
-        return idProdotto;
+        return id;
     }
-    public void setId(String idProdotto) {
-        this.idProdotto = idProdotto;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNome() {

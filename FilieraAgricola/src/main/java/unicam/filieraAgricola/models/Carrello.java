@@ -11,13 +11,12 @@ public class Carrello {
     @Id
     private String id;
 
-    @DBRef
-    private UtenteLoggato utente;
+    private String idUtente;
 
     private List<ComponenteCarrello> carrello = new ArrayList<>();
 
-    public Carrello(UtenteLoggato utente) {
-        this.utente = utente;
+    public Carrello(String idUtente) {
+        this.idUtente = idUtente;
     }
     public Carrello() {}
 
@@ -28,6 +27,7 @@ public class Carrello {
         }
         return prezzoTotale;
     }
+
     public int getQuantitaCarrello() {
         int quantitaTotale = 0;
         for(ComponenteCarrello cc : carrello) {
@@ -43,14 +43,9 @@ public class Carrello {
 
     public void aggiungiProdotto(Prodotto prodotto, int quantita) {
         ComponenteCarrello componente = new ComponenteCarrello(prodotto, quantita);
-        if(carrello.contains(componente)) {
-            int indexComponente = carrello.indexOf(componente);
-
-            carrello.get(indexComponente).setQuantita(indexComponente + quantita);
-        }
-        else
-            carrello.add(componente);
+        carrello.add(componente);
     }
+
     public void rimuoviProdotto(String idProdotto)
     {
         carrello.removeIf(c -> c.getProdotto().getId().equals(idProdotto));
@@ -59,14 +54,14 @@ public class Carrello {
     public String getId() {return id;}
     public void setId(String id) {this.id = id;}
 
-    public UtenteLoggato getUtente() {return utente;}
-    public void setUtente(UtenteLoggato utente) {this.utente = utente;}
+    public String getIdUtente() {return idUtente;}
+    public void setIdUtente(String idUtente) {this.idUtente = idUtente;}
 
     public List<ComponenteCarrello> getCarrello() {return carrello;}
     public void setCarrello(List<ComponenteCarrello> carrello) {this.carrello = carrello;}
 
     public static class ComponenteCarrello{
-        @DBRef
+
         private Prodotto prodotto;
         private int quantita;
 
@@ -81,7 +76,6 @@ public class Carrello {
 
 
         public Prodotto getProdotto() {return prodotto;}
-
         public void setProdotto(Prodotto prodotto) {this.prodotto = prodotto;}
 
         public int getQuantita() {return quantita;}
